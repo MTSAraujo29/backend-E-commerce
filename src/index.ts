@@ -1,14 +1,17 @@
+// Carrega as variáveis de ambiente IMEDIATAMENTE
+// Esta deve ser a PRIMEIRA coisa que o app faz
+import dotenv from 'dotenv';
+dotenv.config();
+
+// --- Agora importa o resto dos pacotes ---
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import productRoutes from './routes/productRoutes';
 import addressRoutes from './routes/addressRoutes';
 import authRoutes from './routes/authRoutes';
 import orderRoutes from './routes/orderRoutes';
+// O Prisma só é importado DEPOIS que o dotenv.config() rodou
 import { prisma } from './models/Product';
-
-// Configuração do ambiente
-dotenv.config();
 
 // Inicialização do app
 const app = express();
@@ -35,13 +38,15 @@ const startServer = async () => {
     // Testar conexão com o banco de dados
     await prisma.$connect();
     console.log('Conexão com o MySQL estabelecida com sucesso via Prisma.');
-    
+
     // Iniciar servidor
     app.listen(PORT, () => {
       console.log(`Servidor rodando na porta ${PORT}`);
     });
   } catch (error) {
     console.error('Erro ao conectar ao banco de dados:', error);
+    // Informa ao Render que o app falhou ao iniciar
+    process.exit(1);
   } finally {
     // Garantir que o Prisma seja desconectado quando o servidor for encerrado
     process.on('beforeExit', async () => {
