@@ -1,28 +1,32 @@
+// src/models/Product.ts
+
 import { PrismaClient } from '@prisma/client';
 
-// Inicialização do cliente Prisma
-export const prisma = new PrismaClient();
+// A instância do Prisma Client agora é uma variável LOCAL
+const prisma = new PrismaClient();
 
-// Tipo para atributos do Produto
+// Tipos para atributos de Produto (mantidos conforme o seu código)
 export type ProductAttributes = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  category: string;
-  imageUrl?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+    id: string;
+    owner: string;
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    category: string;
+    imageUrl?: string | null;
+    createdt: Date;
+    updatedt: Date;
 };
 
 // Tipo para criação de Produto (ID é opcional na criação)
-export type ProductCreateInput = Omit<ProductAttributes, 'id' | 'createdAt' | 'updatedAt'>;
+export type ProductCreateInput = Omit<ProductAttributes, 'id' | 'createdt' | 'updatedt'>;
 
 // Tipo para atualização de Produto
 export type ProductUpdateInput = Partial<ProductCreateInput>;
 
-// Exportando o modelo Product do Prisma Client
+// Exportando o modelo Product (Continua como exportação nomeada)
 export const Product = prisma.product;
 
-export default Product;
+// EXPORTA A INSTÂNCIA COMPLETA do Prisma Client como DEFAULT
+export default prisma;
