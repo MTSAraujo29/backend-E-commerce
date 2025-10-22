@@ -1,0 +1,49 @@
+{
+  "name": "mini-ecommerce-backend",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint . --ext .ts"
+  },
+  "keywords": [
+    "ecommerce",
+    "api",
+    "nodejs",
+    "typescript",
+    "express"
+  ],
+  "author": "Marto Sistemas",
+  "license": "ISC",
+  "description": "Mini E-commerce Backend para teste técnico",
+  "dependencies": {
+    "@prisma/client": "^6.17.1",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.9.1",
+    "@types/sequelize": "^4.28.20",
+    "@types/supertest": "^6.0.3",
+    "axios": "^1.12.2",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jest": "^30.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.9.2",
+    "prisma": "^6.17.1",
+    "sequelize": "^6.37.1",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/jsonwebtoken": "^9.0.10"
+  }
+}

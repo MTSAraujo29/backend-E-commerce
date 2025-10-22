@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_NAME=mini_ecommerce
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_HOST=mysql
+    depends_on:
+      - mysql
+    volumes:
+      - ./:/app
+      - /app/node_modules
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=mini_ecommerce
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
