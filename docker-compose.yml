@@ -13,7 +13,9 @@ services:
       - DB_HOST=mysql
     depends_on:
       - mysql
-    # A seção 'volumes' foi COMPLETAMENTE removida do serviço 'app'
+    # --- ADICIONE ESTA LINHA ---
+    restart: on-failure
+    # ---------------------------
 
   mysql:
     image: mysql:8.0
