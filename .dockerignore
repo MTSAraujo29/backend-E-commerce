@@ -1,0 +1,8 @@
+# Ignora a pasta de módulos do Node local
+node_modules
+
+# Ignora o output da compilação
+dist
+
+# Ignora o arquivo .env
+.env
