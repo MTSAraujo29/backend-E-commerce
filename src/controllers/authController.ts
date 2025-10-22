@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+const JWT_SECRET = process.env.JWT_SECRET || 'seu_jwt_secret_seguro';
 
 // Registrar um novo usuário
 export const register = async (req: Request, res: Response) => {
@@ -32,21 +33,10 @@ export const register = async (req: Request, res: Response) => {
       },
     });
 
-    // --- MODIFICAÇÃO INICIA AQUI ---
-    // Pega a chave secreta do .env
-    const secret = process.env.JWT_SECRET;
-
-    // Validação de segurança: Se a chave não existir, envie um erro.
-    if (!secret) {
-      console.error('Erro fatal: JWT_SECRET não foi definida no .env');
-      return res.status(500).json({ message: 'Erro interno do servidor (configuração)' });
-    }
-    // --- MODIFICAÇÃO TERMINA AQUI ---
-
-    // Gerar token JWT usando a chave validada
+    // Gerar token JWT
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      secret, // <-- Use a variável 'secret'
+      JWT_SECRET,
       { expiresIn: '1d' }
     );
 
@@ -86,21 +76,10 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Credenciais inválidas' });
     }
 
-    // --- MODIFICAÇÃO INICIA AQUI ---
-    // Pega a chave secreta do .env
-    const secret = process.env.JWT_SECRET;
-
-    // Validação de segurança: Se a chave não existir, envie um erro.
-    if (!secret) {
-      console.error('Erro fatal: JWT_SECRET não foi definida no .env');
-      return res.status(500).json({ message: 'Erro interno do servidor (configuração)' });
-    }
-    // --- MODIFICAÇÃO TERMINA AQUI ---
-
-    // Gerar token JWT usando a chave validada
+    // Gerar token JWT
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      secret, // <-- Use a variável 'secret'
+      JWT_SECRET,
       { expiresIn: '1d' }
     );
 

@@ -1,60 +1,55 @@
-// src/index.ts
-
-// 1. CARREGA AS VARIÁVEIS DE AMBIENTE IMEDIATAMENTE (PRIORIDADE MÁXIMA)
-import dotenv from 'dotenv';
-dotenv.config();
-
-// 2. IMPORTAÇÕES DE MÓDULOS E ROTAS
 import express from 'express';
 import cors from 'cors';
-
-// Importa a instância 'prisma' usando a EXPORT DEFAULT corrigida
-import prisma from './models/Product'; 
-
-// Importação das rotas
+import dotenv from 'dotenv';
 import productRoutes from './routes/productRoutes';
 import addressRoutes from './routes/addressRoutes';
 import authRoutes from './routes/authRoutes';
 import orderRoutes from './routes/orderRoutes';
+import { prisma } from './models/Product';
 
+// Configuração do ambiente
+dotenv.config();
+
+// Inicialização do app
 const app = express();
-// Usa a variável de ambiente PORT que o Render fornece, ou 3000 localmente
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3000;
 
-// Configurações do App
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
 // Rotas
-app.use(productRoutes);
-app.use(addressRoutes);
-app.use(authRoutes);
-app.use(orderRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/address', addressRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/orders', orderRoutes);
 
-// Rota de Teste
+// Rota raiz
 app.get('/', (req, res) => {
-    res.send('API do Mini E-commerce está funcionando!');
+  res.send('API do Mini E-commerce está funcionando!');
 });
 
+// Inicialização do servidor
+const startServer = async () => {
+  try {
+    // Testar conexão com o banco de dados
+    await prisma.$connect();
+    console.log('Conexão com o MySQL estabelecida com sucesso via Prisma.');
+    
+    // Iniciar servidor
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando na porta ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Erro ao conectar ao banco de dados:', error);
+  } finally {
+    // Garantir que o Prisma seja desconectado quando o servidor for encerrado
+    process.on('beforeExit', async () => {
+      await prisma.$disconnect();
+    });
+  }
+};
 
-// Função de Inicialização
-async function startServer() {
-    try {
-        // Tenta conectar o Prisma ao banco de dados
-        await prisma.$connect();
-        console.log('Conexão com o banco de dados estabelecida com sucesso!');
-
-        app.listen(PORT, () => {
-            console.log(`🚀 Servidor rodando na porta ${PORT}`);
-        });
-    } catch (error) {
-        console.error('Falha ao conectar ao banco de dados ou iniciar o servidor:', error);
-        
-        // Removemos o process.exit(1)
-    }
-}
-
-// Inicia o Servidor
 startServer();
 
 export default app;

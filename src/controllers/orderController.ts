@@ -1,16 +1,8 @@
 import { Request, Response } from 'express';
-// REMOÇÃO: Remova esta linha. O PrismaClient é importado do models/Product
-// import { PrismaClient, Prisma } from '@prisma/client'; 
+// MODIFICAÇÃO: Importar o tipo 'Prisma'
+import { PrismaClient, Prisma } from '@prisma/client';
 
-// NOVO: Importe o PrismaClient instanciado (prisma) usando a sintaxe default
-// Supondo que você tenha corrigido o models/Product.ts para 'export default prisma;'
-import prisma from '../models/Product'; 
-
-// NOVO: Você AINDA precisa do tipo 'Prisma' para a transação
-import { Prisma } from '@prisma/client'; 
-
-// REMOÇÃO: Não instancie o Prisma aqui!
-// const prisma = new PrismaClient(); 
+const prisma = new PrismaClient();
 
 // Criar um novo pedido
 export const createOrder = async (req: Request, res: Response) => {
@@ -20,7 +12,7 @@ export const createOrder = async (req: Request, res: Response) => {
 
   try {
     // Iniciar transação para garantir consistência
-    // O 'tx' usa o tipo 'Prisma.TransactionClient'
+    // MODIFICAÇÃO: Adicionado o tipo 'Prisma.TransactionClient' ao parâmetro 'tx'
     const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // Calcular o total e verificar estoque
       let total = 0;
