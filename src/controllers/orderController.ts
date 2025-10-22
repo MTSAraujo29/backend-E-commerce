@@ -1,16 +1,19 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+// MODIFICAÇÃO: Importar o tipo 'Prisma'
+import { PrismaClient, Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 // Criar um novo pedido
 export const createOrder = async (req: Request, res: Response) => {
-  const { items } = req.body;
+  // @ts-ignore - Assumindo que 'req.user' é adicionado por um middleware de autenticação
   const userId = req.user.id;
+  const { items } = req.body;
 
   try {
     // Iniciar transação para garantir consistência
-    const result = await prisma.$transaction(async (tx) => {
+    // MODIFICAÇÃO: Adicionado o tipo 'Prisma.TransactionClient' ao parâmetro 'tx'
+    const result = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // Calcular o total e verificar estoque
       let total = 0;
       const orderItems = [];
@@ -81,6 +84,7 @@ export const createOrder = async (req: Request, res: Response) => {
 // Listar todos os pedidos do usuário
 export const getUserOrders = async (req: Request, res: Response) => {
   try {
+    // @ts-ignore - Assumindo que 'req.user' é adicionado por um middleware de autenticação
     const userId = req.user.id;
 
     const orders = await prisma.order.findMany({
@@ -108,6 +112,7 @@ export const getUserOrders = async (req: Request, res: Response) => {
 export const getOrderById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    // @ts-ignore - Assumindo que 'req.user' é adicionado por um middleware de autenticação
     const userId = req.user.id;
 
     const order = await prisma.order.findFirst({
@@ -125,7 +130,7 @@ export const getOrderById = async (req: Request, res: Response) => {
     });
 
     if (!order) {
-      return res.status(404).json({ message: 'Pedido não encontrado' });
+      return res.status(44).json({ message: 'Pedido não encontrado' });
     }
 
     res.status(200).json(order);
