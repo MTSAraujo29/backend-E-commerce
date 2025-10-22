@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8' # Atualizado para uma versão mais moderna
 
 services:
   app:
@@ -11,21 +11,32 @@ services:
       - DB_USER=root
       - DB_PASSWORD=password
       - DB_HOST=mysql
+    # MUDANÇA AQUI:
+    # Agora o 'app' espera o 'mysql' estar 'healthy' (saudável)
     depends_on:
-      - mysql
-    # --- ADICIONE ESTA LINHA ---
-    restart: on-failure
-    # ---------------------------
+      mysql:
+        condition: service_healthy
+    restart: on-failure # Podemos manter isso por segurança
 
   mysql:
     image: mysql:8.0
     ports:
       - "3306:3306"
     environment:
+      # As senhas DEVEM bater com o healthcheck abaixo
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=mini_ecommerce
     volumes:
       - mysql-data:/var/lib/mysql
+    # NOVA SEÇÃO:
+    # O Docker vai rodar este comando até que ele funcione,
+    # provando que o banco está pronto.
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "--password=password"]
+      interval: 10s   # Tenta a cada 10 segundos
+      timeout: 5s     # Espera 5 segundos pela resposta
+      retries: 5      # Tenta 5 vezes
+      start_period: 10s # Espera 10s antes da primeira tentativa
 
 volumes:
   mysql-data:
