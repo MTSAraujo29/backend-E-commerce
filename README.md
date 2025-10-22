@@ -1,29 +1,43 @@
-# Mini E-commerce Backend
+# Mini E-commerce Backend (Teste Manto Sistemas)
 
-API RESTful para um mini e-commerce desenvolvida com Node.js, Express, TypeScript e MySQL.
+API RESTful completa para gerenciamento de pedidos de venda e produtos, desenvolvida como parte do teste técnico para a vaga de Programador JavaScript Pleno (Backend) na Manto Sistemas.
 
-## Funcionalidades
+O projeto foi desenvolvido em Node.js com Express, TypeScript e MySQL (utilizando o Prisma ORM), e está totalmente containerizado com Docker.
 
-- CRUD completo de produtos
-- Integração com API pública de CEP (ViaCEP)
-- Validação de dados
-- Documentação detalhada
+## Principais Funcionalidades
+
+Este projeto implementa todas as funcionalidades obrigatórias e diversos diferenciais solicitados:
+
+* **Autenticação e Autorização:** Cadastro e Login de usuários com senhas criptografadas (Bcrypt) e proteção de rotas com JWT.
+* **CRUD de Produtos:** Gerenciamento completo de produtos (Criar, Listar, Editar, Excluir).
+* **CRUD de Pedidos:** Gerenciamento de pedidos com consulta por cliente.
+* **Controle de Estoque:** Atualização automática do estoque ao criar um novo pedido.
+* **Integração Externa:** Consulta de endereços via API pública (ViaCEP) para ser usada em cadastros.
+
+## Entregáveis (Links)
+
+* **[Documentação da API (Postman/Hoppscotch)]**: `[COLE SEU LINK DO POSTMAN/HOPPSCOTCH AQUI]`
+* **[Vídeo de Apresentação (2-5 min)]**: `[COLE SEU LINK DO VÍDEO AQUI]`
+* **[Deploy Funcional (Render/Railway)]**: `[COLE SEU LINK DO DEPLOY ONLINE AQUI (OPCIONAL)]`
 
 ## Tecnologias Utilizadas
 
-- Node.js
-- Express
-- TypeScript
-- MySQL com Prisma ORM
-- Docker
-- Jest para testes
-- Bcrypt para criptografia de senhas
-- JWT para autenticação
+* **Backend:** Node.js, Express, TypeScript
+* **Banco de Dados:** MySQL
+* **ORM:** Prisma
+* **Testes:** Jest
+* **Autenticação:** JWT (jsonwebtoken) e Bcrypt
+* **Containerização:** Docker e Docker Compose
+* **Validação:** Zod (ou outra biblioteca de sua escolha)
 
 ## Estrutura do Projeto
 
 ```
 prisma/
+  └── migrations
+      └── 20251022145811_init
+          └──migration.sql
+      └── migration_lock.toml
   └── schema.prisma    # Definição do schema do Prisma
 src/
   ├── controllers/     # Controladores da aplicação
@@ -37,76 +51,108 @@ src/
 
 ## Endpoints da API
 
-### Produtos
+*A documentação completa com exemplos de requisição está no link do Postman acima.*
 
-- `GET /api/products` - Listar todos os produtos
-- `GET /api/products/:id` - Obter produto por ID
-- `POST /api/products` - Criar novo produto
-- `PUT /api/products/:id` - Atualizar produto
-- `DELETE /api/products/:id` - Excluir produto
+### Autenticação (`/api/auth`)
+* `POST /register`: Registrar novo usuário.
+* `POST /login`: Login (retorna token JWT).
 
-### Endereço (CEP)
+### Produtos (`/api/products`) - (Protegido)
+* `GET /`: Listar todos os produtos.
+* `GET /:id`: Obter produto por ID.
+* `POST /`: Criar novo produto.
+* `PUT /:id`: Atualizar produto.
+* `DELETE /:id`: Excluir produto.
 
-- `GET /api/address/:cep` - Buscar endereço por CEP
+### Pedidos (`/api/orders`) - (Protegido)
+* `POST /`: Criar novo pedido (atualiza o estoque).
+* `GET /`: Listar pedidos do usuário autenticado.
+* `GET /:id`: Obter pedido por ID.
 
-### Autenticação
+### Endereço (`/api/address`)
+* `GET /:cep`: Buscar endereço por CEP (Integração Externa).
 
-- `POST /api/auth/register` - Registrar novo usuário (com criptografia bcrypt)
-- `POST /api/auth/login` - Login de usuário
+---
 
-### Pedidos (Requer Autenticação)
+## Como Executar o Projeto Localmente
 
-- `POST /api/orders` - Criar novo pedido
-- `GET /api/orders` - Listar pedidos do usuário
-- `GET /api/orders/:id` - Obter pedido por ID
+### Requisitos Obrigatórios
 
-## Como Executar
+* **Node.js (v18+ OBRIGATÓRIO)**
+* **Docker Desktop** (deve estar rodando)
 
-### Requisitos
+### 1. Configuração Inicial (Setup)
 
-- Node.js (v14+)
-- MySQL
-- Docker (opcional)
+1.  Clone o repositório:
+    ```bash
+    git clone [URL-DO-SEU-REPOSITÓRIO]
+    cd [NOME-DO-PROJETO]
+    ```
 
-### Instalação
+2.  Instale as dependências do Node:
+    ```bash
+    npm install
+    ```
 
-1. Clone o repositório
-2. Instale as dependências:
-   ```
-   npm install
-   ```
-3. Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
-   ```
-   PORT=3000
-   DB_NAME=mini_ecommerce
-   DB_USER=root
-   DB_PASSWORD=sua_senha
-   DB_HOST=localhost
-   DATABASE_URL=mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_NAME}
-   ```
-4. Execute a migração do Prisma para criar as tabelas no banco de dados:
-   ```
-   npx prisma migrate dev --name init
-   ```
+3.  Crie um arquivo `.env` na raiz do projeto. Este arquivo é usado para o `npm run dev` e para os comandos `prisma` se conectarem ao banco de dados do Docker.
+    ```env
+    # .env
+    PORT=3000
+    
+    # Configuração do Banco (para conectar ao Docker localmente)
+    DB_NAME=mini_ecommerce
+    DB_USER=root
+    DB_PASSWORD=password
+    DB_HOST=localhost
+    
+    DATABASE_URL="mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_NAME}"
+    
+    # Chave secreta para o JWT
+    JWT_SECRET=sua_chave_secreta_aqui
+    ```
 
-### Executando o Projeto
+### 2. Executando com Docker (Método Recomendado)
 
-```
-npm run dev
-```
+Este método inicia a API e o Banco de Dados MySQL dentro de contêineres Docker, como solicitado no teste.
 
-### Usando Docker
+1.  Inicie os contêineres:
+    ```bash
+    docker compose up -d --build
+    ```
+    *(Este comando irá construir a imagem, baixar o MySQL e iniciar ambos. O `healthcheck` garante que a API só inicie *depois* que o banco de dados estiver pronto.)*
 
-```
-docker-compose up
-```
+2.  Execute a migração do Prisma para criar as tabelas no banco de dados Docker:
+    ```bash
+    npx prisma migrate dev
+    ```
+
+**Pronto!** A aplicação estará rodando em `http://localhost:3000`.
+
+### 3. Executando Localmente (Para Desenvolvimento)
+
+Este método é útil se você quiser fazer alterações no código com "hot-reload".
+
+1.  **Certifique-se de que o banco de dados Docker (do Passo 2) esteja rodando:**
+    ```bash
+    # Se não estiver rodando, inicie apenas o banco
+    docker compose up -d mysql
+    ```
+
+2.  Execute a migração (se ainda não o fez):
+    ```bash
+    npx prisma migrate dev
+    ```
+
+3.  Inicie o servidor de desenvolvimento (com `ts-node`):
+    ```bash
+    npm run dev
+    ```
+
+A aplicação estará rodando em `http://localhost:3000`.
 
 ## Testes
 
-```
+Para rodar os testes automatizados (Jest):
+
+```bash
 npm test
-```
-
-## Autor
-
-Desenvolvido como parte do teste técnico para a vaga de Programador JavaScript Pleno (Backend) na Marto Sistemas.
