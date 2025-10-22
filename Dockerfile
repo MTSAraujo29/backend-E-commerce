@@ -10,7 +10,7 @@ COPY . .
 
 # --- ADICIONE ESTA NOVA LINHA ---
 RUN echo "FORCE_REBUILD_V5"
-# ---------------------------------
+# --------------------------------
 
 RUN npx prisma generate
 
