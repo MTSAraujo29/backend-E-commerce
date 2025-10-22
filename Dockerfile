@@ -8,7 +8,10 @@ RUN npm install
 
 COPY . .
 
-# Gera o Prisma Client antes de compilar o TypeScript
+# --- ADICIONE ESTA NOVA LINHA ---
+RUN echo "FORCE_REBUILD_V5"
+# ---------------------------------
+
 RUN npx prisma generate
 
 RUN npm run build
