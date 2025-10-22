@@ -8,6 +8,9 @@ RUN npm install
 
 COPY . .
 
+# Gera o Prisma Client antes de compilar o TypeScript
+RUN npx prisma generate
+
 RUN npm run build
 
 EXPOSE 3000
