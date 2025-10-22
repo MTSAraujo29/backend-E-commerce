@@ -13,9 +13,7 @@ services:
       - DB_HOST=mysql
     depends_on:
       - mysql
-    volumes:
-      # A linha "- ./:/app" foi removida para evitar conflito com a pasta /dist
-      - /app/node_modules
+    # A seção 'volumes' foi COMPLETAMENTE removida do serviço 'app'
 
   mysql:
     image: mysql:8.0
