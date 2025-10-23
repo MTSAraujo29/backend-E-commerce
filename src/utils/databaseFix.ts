@@ -16,9 +16,6 @@ async function fixDatabase() {
       console.log(
         "Tabela Order antiga encontrada, será corrigida automaticamente..."
       );
-
-      // Aqui você pode adicionar lógica para migrar dados se necessário
-      // Por enquanto, vamos apenas garantir que as novas tabelas existam
     } catch (error) {
       console.log("Tabela Order antiga não encontrada, prosseguindo...");
     }

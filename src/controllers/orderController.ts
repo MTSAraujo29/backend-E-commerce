@@ -6,7 +6,6 @@ const prisma = new PrismaClient();
 
 // Criar um novo pedido
 export const createOrder = async (req: Request, res: Response) => {
-  // @ts-ignore - Assumindo que 'req.user' é adicionado por um middleware de autenticação
   const userId = req.user.id;
   const { items } = req.body;
 
@@ -84,7 +83,6 @@ export const createOrder = async (req: Request, res: Response) => {
 // Listar todos os pedidos do usuário
 export const getUserOrders = async (req: Request, res: Response) => {
   try {
-    // @ts-ignore - Assumindo que 'req.user' é adicionado por um middleware de autenticação
     const userId = req.user.id;
 
     const orders = await prisma.order.findMany({
@@ -112,7 +110,6 @@ export const getUserOrders = async (req: Request, res: Response) => {
 export const getOrderById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    // @ts-ignore - Assumindo que 'req.user' é adicionado por um middleware de autenticação
     const userId = req.user.id;
 
     const order = await prisma.order.findFirst({
