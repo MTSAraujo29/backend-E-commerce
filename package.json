@@ -9,7 +9,9 @@
     "test": "jest",
     "lint": "eslint . --ext .ts",
     "render:build": "npx prisma generate && npm run build",
-    "render:start": "npx prisma migrate deploy && npm start"
+    "render:start": "npx prisma migrate deploy && npm start",
+    "db:reset": "npx prisma migrate reset --force",
+    "db:deploy": "npx prisma migrate deploy"
   },
   "keywords": [
     "ecommerce",

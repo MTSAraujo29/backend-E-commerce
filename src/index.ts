@@ -37,16 +37,30 @@ const startServer = async () => {
     console.log('Conexão com o MySQL estabelecida com sucesso via Prisma.');
     
     // Iniciar servidor
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log(`Servidor rodando na porta ${PORT}`);
     });
+
+    // Tratamento de sinais para shutdown graceful
+    process.on('SIGTERM', async () => {
+      console.log('SIGTERM recebido, encerrando servidor...');
+      server.close(async () => {
+        await prisma.$disconnect();
+        process.exit(0);
+      });
+    });
+
+    process.on('SIGINT', async () => {
+      console.log('SIGINT recebido, encerrando servidor...');
+      server.close(async () => {
+        await prisma.$disconnect();
+        process.exit(0);
+      });
+    });
+
   } catch (error) {
     console.error('Erro ao conectar ao banco de dados:', error);
-  } finally {
-    // Garantir que o Prisma seja desconectado quando o servidor for encerrado
-    process.on('beforeExit', async () => {
-      await prisma.$disconnect();
-    });
+    process.exit(1);
   }
 };
 
