@@ -7,7 +7,9 @@
     "dev": "ts-node src/index.ts",
     "build": "tsc",
     "test": "jest",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "render:build": "npx prisma generate && npm run build",
+    "render:start": "npx prisma migrate deploy && npm start"
   },
   "keywords": [
     "ecommerce",
