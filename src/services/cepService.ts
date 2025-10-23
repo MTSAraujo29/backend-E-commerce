@@ -31,7 +31,7 @@ export const getAddressByCep = async (cep: string): Promise<AddressInfo> => {
       timeout: 15000, // 15 segundos
       headers: {
         "User-Agent": "Mini-Ecommerce-API/1.0",
-        "Accept": "application/json",
+        Accept: "application/json",
       },
       // Configurações para contornar problemas de rede
       maxRedirects: 5,
@@ -50,31 +50,35 @@ export const getAddressByCep = async (cep: string): Promise<AddressInfo> => {
     for (const apiUrl of apis) {
       try {
         console.log(`Tentando API: ${apiUrl}`);
-        
+
         const response = await axios.get(apiUrl, axiosConfig);
-        
+
         console.log(`Resposta da API:`, response.data);
 
         // Verificar se a resposta é válida
         if (response.data && !response.data.erro) {
           // Normalizar dados para formato padrão
           const normalizedData = normalizeAddressData(response.data, apiUrl);
-          
+
           if (normalizedData.cep && normalizedData.localidade) {
             console.log(`CEP ${cleanCep} encontrado via ${apiUrl}`);
             return normalizedData;
           }
         }
       } catch (error) {
-        console.log(`Erro na API ${apiUrl}:`, error.message);
+        console.log(
+          `Erro na API ${apiUrl}:`,
+          error instanceof Error ? error.message : String(error)
+        );
         lastError = error;
         continue; // Tentar próxima API
       }
     }
 
     // Se todas as APIs falharam
-    throw new Error(`Não foi possível consultar o CEP ${cleanCep}. Todas as APIs estão indisponíveis.`);
-    
+    throw new Error(
+      `Não foi possível consultar o CEP ${cleanCep}. Todas as APIs estão indisponíveis.`
+    );
   } catch (error) {
     console.error(`Erro detalhado ao consultar CEP ${cep}:`, error);
 
@@ -83,7 +87,9 @@ export const getAddressByCep = async (cep: string): Promise<AddressInfo> => {
         throw new Error("Timeout ao consultar CEP. Tente novamente.");
       }
       if (error.code === "EHOSTUNREACH") {
-        throw new Error("Erro de conectividade. Serviço de CEP temporariamente indisponível.");
+        throw new Error(
+          "Erro de conectividade. Serviço de CEP temporariamente indisponível."
+        );
       }
       if (error.response?.status === 404) {
         throw new Error("CEP não encontrado");
@@ -96,62 +102,62 @@ export const getAddressByCep = async (cep: string): Promise<AddressInfo> => {
 
 // Função para normalizar dados de diferentes APIs
 function normalizeAddressData(data: any, apiUrl: string): AddressInfo {
-  if (apiUrl.includes('viacep.com.br')) {
+  if (apiUrl.includes("viacep.com.br")) {
     return {
       cep: data.cep,
-      logradouro: data.logradouro || '',
-      complemento: data.complemento || '',
-      bairro: data.bairro || '',
-      localidade: data.localidade || '',
-      uf: data.uf || '',
-      ibge: data.ibge || '',
-      gia: data.gia || '',
-      ddd: data.ddd || '',
-      siafi: data.siafi || '',
+      logradouro: data.logradouro || "",
+      complemento: data.complemento || "",
+      bairro: data.bairro || "",
+      localidade: data.localidade || "",
+      uf: data.uf || "",
+      ibge: data.ibge || "",
+      gia: data.gia || "",
+      ddd: data.ddd || "",
+      siafi: data.siafi || "",
     };
   }
-  
-  if (apiUrl.includes('awesomeapi.com.br')) {
+
+  if (apiUrl.includes("awesomeapi.com.br")) {
     return {
       cep: data.cep,
-      logradouro: data.address || '',
-      complemento: '',
-      bairro: data.district || '',
-      localidade: data.city || '',
-      uf: data.state || '',
-      ibge: '',
-      gia: '',
-      ddd: '',
-      siafi: '',
+      logradouro: data.address || "",
+      complemento: "",
+      bairro: data.district || "",
+      localidade: data.city || "",
+      uf: data.state || "",
+      ibge: "",
+      gia: "",
+      ddd: "",
+      siafi: "",
     };
   }
-  
-  if (apiUrl.includes('brasilapi.com.br')) {
+
+  if (apiUrl.includes("brasilapi.com.br")) {
     return {
       cep: data.cep,
-      logradouro: data.street || '',
-      complemento: '',
-      bairro: data.neighborhood || '',
-      localidade: data.city || '',
-      uf: data.state || '',
-      ibge: '',
-      gia: '',
-      ddd: '',
-      siafi: '',
+      logradouro: data.street || "",
+      complemento: "",
+      bairro: data.neighborhood || "",
+      localidade: data.city || "",
+      uf: data.state || "",
+      ibge: "",
+      gia: "",
+      ddd: "",
+      siafi: "",
     };
   }
-  
+
   // Fallback para dados genéricos
   return {
-    cep: data.cep || '',
-    logradouro: data.logradouro || data.street || data.address || '',
-    complemento: data.complemento || '',
-    bairro: data.bairro || data.district || data.neighborhood || '',
-    localidade: data.localidade || data.city || '',
-    uf: data.uf || data.state || '',
-    ibge: data.ibge || '',
-    gia: data.gia || '',
-    ddd: data.ddd || '',
-    siafi: data.siafi || '',
+    cep: data.cep || "",
+    logradouro: data.logradouro || data.street || data.address || "",
+    complemento: data.complemento || "",
+    bairro: data.bairro || data.district || data.neighborhood || "",
+    localidade: data.localidade || data.city || "",
+    uf: data.uf || data.state || "",
+    ibge: data.ibge || "",
+    gia: data.gia || "",
+    ddd: data.ddd || "",
+    siafi: data.siafi || "",
   };
 }
