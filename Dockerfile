@@ -15,5 +15,5 @@ RUN npm prune --production
 
 EXPOSE $PORT
 
-# Script para executar migrações e iniciar a aplicação
-CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
+# Script para resetar banco e executar migrações automaticamente
+CMD ["sh", "-c", "npx prisma migrate reset --force --skip-seed && npm start"]
