@@ -42,6 +42,8 @@ model Order {
   items     OrderItem[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+
+  @@map("orders")
 }
 
 model OrderItem {
@@ -55,6 +57,7 @@ model OrderItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@map("order_items")
   @@index([orderId])
   @@index([productId])
 }
