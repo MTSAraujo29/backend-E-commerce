@@ -16,7 +16,7 @@ interface AddressInfo {
 export const getAddressByCep = async (cep: string): Promise<AddressInfo> => {
   try {
     console.log(`Iniciando consulta para CEP: ${cep}`);
-    
+
     // Remove caracteres não numéricos do CEP
     const cleanCep = cep.replace(/\D/g, "");
     console.log(`CEP limpo: ${cleanCep}`);
@@ -30,11 +30,13 @@ export const getAddressByCep = async (cep: string): Promise<AddressInfo> => {
     const axiosConfig = {
       timeout: 10000, // 10 segundos
       headers: {
-        'User-Agent': 'Mini-Ecommerce-API/1.0'
-      }
+        "User-Agent": "Mini-Ecommerce-API/1.0",
+      },
     };
 
-    console.log(`Fazendo requisição para ViaCEP: https://viacep.com.br/ws/${cleanCep}/json/`);
+    console.log(
+      `Fazendo requisição para ViaCEP: https://viacep.com.br/ws/${cleanCep}/json/`
+    );
 
     // Faz a requisição para a API ViaCEP
     const response = await axios.get(
@@ -57,9 +59,9 @@ export const getAddressByCep = async (cep: string): Promise<AddressInfo> => {
     return response.data;
   } catch (error) {
     console.error(`Erro detalhado ao consultar CEP ${cep}:`, error);
-    
+
     if (axios.isAxiosError(error)) {
-      if (error.code === 'ECONNABORTED') {
+      if (error.code === "ECONNABORTED") {
         throw new Error("Timeout ao consultar CEP. Tente novamente.");
       }
       if (error.response?.status === 404) {
