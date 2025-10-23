@@ -11,4 +11,5 @@ RUN npm run build
 
 EXPOSE $PORT
 
-CMD ["npm", "start"]
+# Script para executar migrações e iniciar a aplicação
+CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]
