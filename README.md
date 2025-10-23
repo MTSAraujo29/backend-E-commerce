@@ -26,7 +26,7 @@ Este projeto implementa todas as funcionalidades obrigatórias e diversos difere
 
 ## Entregáveis (Links)
 
-- **[Documentação da API (Postman/Hoppscotch)]**: `[COLE SEU LINK DO POSTMAN/HOPPSCOTCH AQUI]`
+- **[Documentação da API (Postman)]**: `[COLE SEU LINK DO POSTMAN/HOPPSCOTCH AQUI]`
 - **[Vídeo de Apresentação (2-5 min)]**: `[COLE SEU LINK DO VÍDEO AQUI]`
 - **[Deploy Funcional (Render)]**: `https://mini-ecommerce-api-h8iv.onrender.com/`
 
