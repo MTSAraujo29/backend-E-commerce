@@ -26,8 +26,8 @@ Este projeto implementa todas as funcionalidades obrigatórias e diversos difere
 
 ## Entregáveis (Links)
 
-- **[Documentação da API (Postman)]**: `[COLE SEU LINK DO POSTMAN/HOPPSCOTCH AQUI]`
-- **[Vídeo de Apresentação (2-5 min)]**: `[COLE SEU LINK DO VÍDEO AQUI]`
+- **[Documentação da API (Postman)]**: `https://matheusferreiradearaujo19-4240810.postman.co/workspace/Matheus's-Workspace~776cdd6b-1140-4a93-8dab-a4b6ae3469f9/collection/49471284-556b2cd6-d5e7-4a15-9a2d-3dabd385d96a?action=share&creator=49471284`
+- **[Vídeo de Apresentação (2-5 min)]**: `https://youtu.be/tvrICLjAHP4`
 - **[Deploy Funcional (Render)]**: `https://mini-ecommerce-api-h8iv.onrender.com/`
 
 ## Tecnologias Utilizadas
@@ -46,11 +46,14 @@ Este projeto implementa todas as funcionalidades obrigatórias e diversos difere
 ```
 prisma/
   └── migrations
+      └──20250123000000_rename_order_tables
+          └──migration.sql
       └── 20251022145811_init
           └──migration.sql
       └── migration_lock.toml
   └── schema.prisma    # Definição do schema do Prisma
 src/
+  ├──__tests__
   ├── controllers/     # Controladores da aplicação
   ├── models/          # Modelos e cliente Prisma
   ├── routes/          # Rotas da API
@@ -247,4 +250,4 @@ Se uma API falhar, o sistema automaticamente tenta a próxima, garantindo alta d
 
 ## Contribuição
 
-Este projeto foi desenvolvido como teste técnico e está em produção. Para contribuições ou melhorias, entre em contato através dos canais oficiais.
+Este projeto foi desenvolvido como teste técnico e está em produção. Para contribuições ou melhorias.
